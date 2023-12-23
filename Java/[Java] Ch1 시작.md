@@ -56,3 +56,38 @@
 - 동적 로딩
   - 실행시에 모든 클래스가 로딩 되지 않고 필요한 시점에 동적으로 로딩됨
   - 그러므로 일부 클래스가 변해도 전체 어플리케이션을 다시 컴파일 하지 않아도 됨 
+
+
+## HelloJava.java
+```java 
+public class HelloJava {
+
+    public static void main(String[] args) {
+        System.out.println("hello java");
+    }
+}
+```
+- HelloJava.java -> 컴파일(javac) -> HelloJava.class -> 실행(java, JVM) -> java HelloJava
+- 코드는 클래스 안에 존재함
+- 자바 문법은 대소문자를 구분함
+- 소스 파일의 이름은 public class 의 이름과 같아야함
+- 한 클래스 안에 하나의 public class 만이 존재 가능
+- psvm으로 public static void main(String[] args) 한번에 입력 가능
+
+
+## Comment Java
+```java
+public class CommentJava {
+    public static void main(String[] args) {
+        System.out.println("hello java1"); //주석1
+        //System.out.println("hello java2");
+
+        /*
+        System.out.println("hello java3");
+        System.out.println("hello java4");
+         */
+    }
+}
+```
+
+- 주석은 c++에서와 동일함
