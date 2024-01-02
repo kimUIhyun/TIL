@@ -373,3 +373,68 @@ import java.lang.System.out;
 
 out.println();  // 클래스 이름 System 생략
 ```
+
+## 제어자
+- 접근 제어자 : public, protected, default, private
+- 그 외 : static, final, abstract, native, transient, synchronized, volatile, strictfp
+
+### static - 클래스의, 공통적인
+- 클래스가 할당될 때 하나의 메모리에 저장되고 모든 인스턴스들이 공유함  
+- 인스턴스를 생성하지 않고도 사용할 수 있음  
+- static 메서드론 생성 시기가 다르기 때문에 인스턴스 멤버에 접근할 수 없음
+
+### final - 마지막, 변경될 수 없는
+- 변수에 사용 : 상수(변경 불가)
+  - 인스턴스 생성시 생성자로 인해서 초기화 가능
+- 메서드에 사용 : 오버라이딩(재정의) 불가
+- 클래스에 사용 : 상속(확장) 불가
+
+### abstract - 추상, 미완성의
+- 클래스에 사용 : 클래스 내부에 추상 메서드가 선언되어있음을 의미
+- 메서드에 사용 : 메서드의 선언부만 작성하고 구현부는 작성하지 않는 추상 메서드를 선언하는데 사용
+
+추상 클래스에 대해서는 뒤에서 다룸
+
+### 접근 제어자 - 캡슐화
+외부로부터 데이터를 보호하거나 내부적으로만 사용되는 부분을 감추기 위함  
+ex) Time 클래스가 있다고 하면 시간은 0부터 24의 값을 가져야하므로 private으로 선언하고 public 메서드로 유효화 검사를 거쳐 접근하게 함
+- private : 같은 클래스 내에서만 접근 가능
+- default : 같은 패키지 내에서만 접근 가능
+- protected : 같은 패키지, 패키지 상관 없이 자손 클래스면 접근 가능
+- public : 제한 없음
+
+지정 가능한 대상
+- 클래스 : public, default
+- 메서드, 멤버변수 : public, protected, default, private
+- 지역변수 : 없음
+
+
+
+
+### 생성자의 접근 제어
+생성자에 private을 걸어 외부에서 인스턴스를 생성하지 못하게 하거나  
+생성자가 private이므로 자식 클래스에서 조상 클래스의 생성자를 호출하지 못해 상속이 불가능한 클래스를 만들 수 있음 ( 이 경우엔 클래스 앞에 final까지 붙여 완전히 명시해주는게 좋음)
+```java
+class Modified {
+    private static Modified[] = new Modified[3];    // 생성 개수 제한
+    static count = 0;
+
+    private Modified()      // 생성자 private
+    
+    public static Modified getModified() {
+        return Modified[count] = new Modified();
+        count++;
+    }
+}
+```
+- 위와 같이 생성자를 private으로 지정해 외부에서 생성을 막고 static으로 인스턴스를 미리 생성해두고 외부에서는 public static함수로 하나씩 가져오게 해 생성 개수를 제한하는 것도 가능
+  
+### 제어자의 조합
+- 메서드에 static 과 abstract 는 함께 사용할 수 없음
+  - static 은 몸통이 있는 메서드에만 사용이 가능함
+- 클래스에 abstract 와 final 을 함께 사용할 수 없음
+  - abstract 는 상속을 통해서 완성이 되는데 final 이 붙으면 상속이 불가능함
+- abstract 메서드의 접근 제어자가 private 일 수 없음
+  - abstract 는 상속을 통해서 완성이 되는데 private 이 붙으면 자손 클래스에서 접근이 불가능함
+- 메서드에 privat 과 final을 같이 쓸 필요는 없음
+  - private 메서드도 자손에서 접근이 불가능해 오버라이딩이 안되기 때문에 굳이 final 까지 쓸 필요는 없음
