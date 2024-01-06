@@ -257,7 +257,7 @@ interface 인터페이스이름 {
 ```
 - 모든 멤버변수는 public static final 이어야 하고 생략 가능
 - 모든 메서드는 public abstract 이어야 하고 생략 가능
-  - 단, static 메서드와 default 메서드는 예외
+  - 단, static 메서드와 default(접근 제어 아님) 메서드는 예외
 
 ### 인터페이스의 상속
 인터페이스는 인터페이스로부터만 상속 받을 수 있고 다중 상속이 가능함  
@@ -298,3 +298,65 @@ IUnit method() {    // 인터페이스 반환 타입
 }
 ```
 ***리턴타입이 인터페이스인 경우에 해당 인터페이스를 구현한 클래스의 인스턴스를 반환함***
+
+### 인터페이스의 장점
+
+- 메서드를 사용하는 입장에선 선언부만 알면 되고 메서드를 구현 하는 사람은 동시에 따로 구현할 수 있기 때문에 개발 시간이 단축됨
+- 클래스의 구현이 분리 되어있으므로 같은 인터페이스를 공유하더라도 간접적인 관계이기 때문에 한 클래스의 변경이 다른 클래스에 영향을 미치지 않음
+- 표준화되고 일관된 개발 가능
+  - 서로 다른 데이터베이스를 이용한 작업일 경우 java application 에서 만든 JDBC 라는 인터페이스들로 이루어진 표준 DB가 있기 때문에 이를 바탕으로 구현한 DB의 경우 전환에 무리가 없음
+- 클래스들에 새로운 관계를 만들어 줄 수 있음
+  - 인터페이스를 정의하고 관계를 설정하고싶은 클래스들이 이를 구현하게 해 그 클래스들 끼리 엮어줄 수 있음
+  - 인터페이스를 정의하고 구현하면서 이를 구현한 클래스를 has a 로 포함하게 해 코드의 중복을 없애 나중에 변경 (유지,보수)이 편하게 할 수 있음
+
+### 인터페이스의 이해
+
+클래스를 사용하는 쪽(User)과 클래스를 제공하는 쪽(Provider)이 있다면  
+메서들를 사용하는 쪽(User)에서는 사용하려는 메서드의 선언부(Provider)만 알면 된다
+
+```java
+class InterfaceTest3 {
+    public static void main(String[] args) {
+        A a = new A();
+        a.methodA();
+    }
+}
+
+class A {
+    void methodA() {
+        I i = InstanceManager.getInstance();    //인스턴스를 직접 생성하지 않고 메서드를 통해 제공받음
+        i.methodB();
+        System.out.println(i.toString());   // i로 Object 메서드 호출 가능
+    }
+}
+
+interface I {
+    public static void methodB();
+}
+
+class B implements I {
+    public void methodB() {
+        System.out.println("method in B class");
+    }
+
+    public String toString() { return "class B"; }
+}
+
+class InstanceManager {
+    public static I getInstance() {
+        return new B();     // 다른 클래스의 인스턴스로 변경하려면 여기만 변경하면 됨
+    }
+}
+```
+- A 입장에선 어떤 클래스의 메서드를 사용하더라도 methdA()만 호출하면 되고 메서드의 내용을 변경해도 A 입장에선 수정할 것이 없음
+
+### 디폴트 메서드
+```java
+interface Myinterface {
+    void method();
+    default void newMethod() {}
+}
+```
+- 이미 구현된 인터페이스에 메서드를 추가할 때 default 메서드로 추가하면 이를 일일이 구현하지 않아도 {} 안의 내용으로 구현됨
+- 필요한 경우에만 그 클래스에서 오버라이딩 해주면 됨
+- 이름이 중복되어 충돌하는 경우 오버라이딩 된 메서드가 호출 되거나 조상 클래스의 메서드가 상속됨
